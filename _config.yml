@@ -106,4 +106,4 @@ deploy:
   type: git
   repo: https://github.com/Rex-Mao/Rex-Mao.github.io
   branch: started
-  message: "Blog started to deploy"
+  message: "Blogs was started to deploy"
