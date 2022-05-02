@@ -712,6 +712,11 @@
   dependencies:
     "nanocolors" "^0.2.12"
 
+"hexo-pagination@^2.0.0":
+  "integrity" "sha512-ZZQli5UwFWTW6bJNF4zwp2PCeGsipgoPxadud8+cPPxvygTP5GjTS5eVWcUTcfEaCluP+O1maxZCCWmYQoJkiQ=="
+  "resolved" "https://registry.npmmirror.com/hexo-pagination/-/hexo-pagination-2.0.0.tgz"
+  "version" "2.0.0"
+
 "hexo-pagination@1.0.0":
   "integrity" "sha512-miEVFgxchPr2qNWxw0JWpJ9R/Yaf7HjHBZVjvCCcqfbsLyYtCvIfJDxcEwz1sDOC/fLzYPqNnhUI73uNxBHRSA=="
   "resolved" "https://registry.npmmirror.com/hexo-pagination/-/hexo-pagination-1.0.0.tgz"

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html<%= config.language ? " lang=" + config.language.substring(0, 2) : ""%>>
 <%- partial('_partial/head') %>
-<body class="max-width mx-auto px3 <%- theme.direction -%>">
+<body>
+  <%- partial('_partial/banner') %>  
+  <div class="max-width mx-auto px3 <%- theme.direction -%>">
     <% if (is_post()) { %>
       <%- partial('_partial/post/actions_desktop') %>
     <% } %>
@@ -13,9 +15,12 @@
         <% if (is_post()) { %>
           <%- partial('_partial/post/actions_mobile') %>
         <% } %>
-        <%- partial('_partial/footer') %>
+        <div class="py4">
+          <%- partial('_partial/footer') %>
+        </div>
     </div>
-    <%- partial('_partial/styles') %>
-    <%- partial('_partial/scripts') %>
+  </div>
+  <%- partial('_partial/styles') %>
+  <%- partial('_partial/scripts') %>
 </body>
 </html>

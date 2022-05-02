@@ -12,6 +12,23 @@ if (!!$.prototype.justifiedGallery) {
 
 $(document).ready(function() {
 
+  $("#wrapper").fadeTo("slow",1);
+  $("#blogtitel").fadeOut(2000);
+
+  $(window).on('scroll', function() {
+
+    var z = $(".banner")[0].getBoundingClientRect().bottom / (
+        $(".banner")[0].getBoundingClientRect().bottom - $(".banner")[0].getBoundingClientRect().top)
+
+    if (z < 0) {
+        z = 0.01
+    }
+
+    $(".wrapper")[0].style.zoom = z
+    $(".wrapper")[0].style.MozTransform = "scale(" + z + ")"
+
+});
+
   /**
    * Shows the responsive navigation menu on mobile.
    */
