@@ -4,8 +4,6 @@ date: 2022-06-17 15:28:46
 tags:
 ---
 
-# Charset & Encoding
-
 ## Charset
 Charset is the set of characters. For example, GB2312(charset) has contained basic simplified chinese characters; Unicode(charset) has contained 144697 characters of 22 languages.
 
