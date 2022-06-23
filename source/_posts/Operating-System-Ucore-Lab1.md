@@ -47,10 +47,10 @@ In those pratices, we can use gdb to debug the bootblock. What we can see is, th
 ### Pratice 4
 
 #### Prob 1
-Wait for the disk ready, and then use outb method (outb(..., 0x20)) to send the command to read sectors. Use insl to read a sector from the io.
+Wait for the disk ready, and then use the supported method of hardware like outb (outb(..., 0x20)) to send the command to read sectors. Use insl to read a sector from the io.
 
 #### Prob 2
-First, we use the readseg method to load the ELFHDR from the kernel image(disk) to the virtual address @va. Then we use the the info stored in the ELFHDR to load the program content to the va. Then we call the entry point from the ELF Header so that the kernel code will take over.
+First, we use the readseg method to load the ELFHDR from the kernel image(disk) to the virtual address @va. Then we use the the info stored in the ELFHDR to load the program content to the @va. Then the bootloader will call the entry point of kernel from the ELF Header so that the kernel code will take over.
 
 ### Practice 5
 In this practice, we can use ebp and eip cleverly to trace the stackframe step by step. What we should to do is getting the current ebp value. Its value contains the last func ebp addr before it. We can also use this ebp value to get the func params(esp+2) and eip value (the addr which can return to last func(esp+1)). We can trace by those registers layer by layer until reach the ebp=0(means the addr which the bootloader start the kernel) or the STACKFRAME_DEPTH.
@@ -59,7 +59,7 @@ In this practice, we can use ebp and eip cleverly to trace the stackframe step b
 
 ### Practice 6
 
-#### Prob1
+#### Prob 1
 In ucore, we can find the gatedesc at /kern/mm/mmu.h.
 ```
 /* Gate descriptors for interrupts and traps */

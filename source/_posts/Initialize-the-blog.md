@@ -1,5 +1,5 @@
 ---
-title: initialize the blog
+title: Initialize the blog
 date: 2020-04-26 12:00:00
 tags:
 ---
