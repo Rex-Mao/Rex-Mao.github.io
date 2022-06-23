@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Practices &amp; ConclusionPractice 1Prob 1By the code, we can see that Makefile use gcc to do the compile operation to the source code with some libs step by step and output some object(.o) files. And">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Operating System | Ucore-Lab1">
+<meta property="og:url" content="https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/">
+<meta property="og:site_name" content="Rex.blog">
+<meta property="og:description" content="Practices &amp; ConclusionPractice 1Prob 1By the code, we can see that Makefile use gcc to do the compile operation to the source code with some libs step by step and output some object(.o) files. And">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-23T01:06:27.000Z">
+<meta property="article:modified_time" content="2022-06-23T01:13:14.082Z">
+<meta property="article:author" content="Rex">
+<meta property="article:tag" content="Operating System">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Operating System | Ucore-Lab1</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div class="banner">
+<div id="blogtitel" class="blogtitel">Rex.blog</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+  
+  <div class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/06/17/Charset-Encoding/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2020/04/26/Initialize-the-blog/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&text=Operating System | Ucore-Lab1"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&is_video=false&description=Operating System | Ucore-Lab1"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab1&body=Check out this article: https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&name=Operating System | Ucore-Lab1&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&t=Operating System | Ucore-Lab1"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">1.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-1"><span class="toc-number">1.1.</span> <span class="toc-text">Practice 1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob-1"><span class="toc-number">1.1.1.</span> <span class="toc-text">Prob 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob-2"><span class="toc-number">1.1.2.</span> <span class="toc-text">Prob 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pratice-2-amp-3"><span class="toc-number">1.2.</span> <span class="toc-text">Pratice 2 &amp; 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pratice-4"><span class="toc-number">1.3.</span> <span class="toc-text">Pratice 4</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob-1-1"><span class="toc-number">1.3.1.</span> <span class="toc-text">Prob 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob-2-1"><span class="toc-number">1.3.2.</span> <span class="toc-text">Prob 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-5"><span class="toc-number">1.4.</span> <span class="toc-text">Practice 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-6"><span class="toc-number">1.5.</span> <span class="toc-text">Practice 6</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob1"><span class="toc-number">1.5.1.</span> <span class="toc-text">Prob1</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Operating System | Ucore-Lab1
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Rex</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-06-23T01:06:27.000Z" itemprop="datePublished">2020-06-23</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Operating-System/" rel="tag">Operating System</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Practices-amp-Conclusion"><a href="#Practices-amp-Conclusion" class="headerlink" title="Practices &amp; Conclusion"></a>Practices &amp; Conclusion</h2><h3 id="Practice-1"><a href="#Practice-1" class="headerlink" title="Practice 1"></a>Practice 1</h3><h4 id="Prob-1"><a href="#Prob-1" class="headerlink" title="Prob 1"></a>Prob 1</h4><p>By the code, we can see that Makefile use gcc to do the compile operation to the source code with some libs step by step and output some object(.o) files. And then it uses ld to link those .o files and produce an executable object(obj&#x2F;bootblock.out). Then use sign tools to generate a standard bootclock.o. Finally, use dd to generate an ucore.img file.</p>
+<ul>
+<li>PS<ul>
+<li>The ld command, also called the linkage editor or binder, combines object files, archives, and import files into one output object file, resolving external references. It produces an executable object file that can be run.</li>
+<li>dd is a command-line utility for Unix and Unix-like operating systems whose primary purpose is to convert and copy files.</li>
+</ul>
+</li>
+<li>From web  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GCC</span><br><span class="line">    -g  增加gdb的调试信息</span><br><span class="line">    -Wall   显示告警信息</span><br><span class="line">    -O2     优化处理 (有 0，1，2，3，0是不优化)</span><br><span class="line">    -fno-builtin   只接受以&quot;__&quot;开头的内建函数</span><br><span class="line">    -ggdb   让gcc为gdb生成比较丰富的调试信息</span><br><span class="line">    -m32    编译32位程序</span><br><span class="line">    -gstabs     此选项以stabs格式生成调试信息，但是不包括gdb调试信息</span><br><span class="line">    -nostdinc   不在标准系统目录中搜索头文件，只在-l指定的目录中搜索</span><br><span class="line">    -fstack-protector-all   启用堆栈保护，为所有函数插入保护代码</span><br><span class="line">    -E  仅做预处理，不进行编译，汇编和链接</span><br><span class="line">    -x c  指明使用的语言为C语言</span><br><span class="line"></span><br><span class="line">LDD Flags</span><br><span class="line">    -nostdlib   不连接系统标准启动文件和标准库文件，只把指定的文件传递给连接器</span><br><span class="line">    -m elf\_i386    使用elf_i386模拟器</span><br><span class="line">    -N      把text和data节设置为可读写，同时取消数据节的页对齐，取消对共享库的链接</span><br><span class="line">    -e func     以符号func的位置作为程序开始运行的位置</span><br><span class="line">    -Ttext addr  是连接时将初始地址重定向为addr （若不注明此，则程序的起始地址为0）</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Prob-2"><a href="#Prob-2" class="headerlink" title="Prob 2"></a>Prob 2</h4><p>We can get the check logic of the image from the tools&#x2F;sign.c. It shows us that an image size should less than 510 bytes and end with 0x55, oxAA.</p>
+<h3 id="Pratice-2-amp-3"><a href="#Pratice-2-amp-3" class="headerlink" title="Pratice 2 &amp; 3"></a>Pratice 2 &amp; 3</h3><p>In those pratices, we can use gdb to debug the bootblock. What we can see is, the cpu load the 0x7c00 for the first command. It does something init like register eax, ds, es, ss. Then, it will enable the A20 which is use to be compatible with the low address(20bits) when we use some high address(like 32bits). If we don’t get A20 enable, the address higher than 1MB(1088kb) will be wrapped around to zero by default in real mode. So when we get A20 enabled, we can use the higer address. Prepare the gdt and gdtdesc structure then use lgdt command to transport them to registers. Then set CR0 register (protected mode) to 1 so that we get protected mode enabled. Prepare the registers under the protected mode, at this time, we finished the processor begins to execute 32-bit code. Now we can totally do operations under it. Set the ebp and esp then we can call bootmain.c.</p>
+<h3 id="Pratice-4"><a href="#Pratice-4" class="headerlink" title="Pratice 4"></a>Pratice 4</h3><h4 id="Prob-1-1"><a href="#Prob-1-1" class="headerlink" title="Prob 1"></a>Prob 1</h4><p>Wait for the disk ready, and then use outb method (outb(…, 0x20)) to send the command to read sectors. Use insl to read a sector from the io.</p>
+<h4 id="Prob-2-1"><a href="#Prob-2-1" class="headerlink" title="Prob 2"></a>Prob 2</h4><p>First, we use the readseg method to load the ELFHDR from the kernel image(disk) to the virtual address @va. Then we use the the info stored in the ELFHDR to load the program content to the va. Then we call the entry point from the ELF Header so that the kernel code will take over.</p>
+<h3 id="Practice-5"><a href="#Practice-5" class="headerlink" title="Practice 5"></a>Practice 5</h3><p>In this practice, we can use ebp and eip cleverly to trace the stackframe step by step. What we should to do is getting the current ebp value. Its value contains the last func ebp addr before it. We can also use this ebp value to get the func params(esp+2) and eip value (the addr which can return to last func(esp+1)). We can trace by those registers layer by layer until reach the ebp&#x3D;0(means the addr which the bootloader start the kernel) or the STACKFRAME_DEPTH.</p>
+<ul>
+<li>PS<ul>
+<li>Function Stack is built from high addr to low addr, so that we can use like esp+1 to get the last eip value(the addr which can return to last func to go on the processing)</li>
+</ul>
+</li>
+</ul>
+<h3 id="Practice-6"><a href="#Practice-6" class="headerlink" title="Practice 6"></a>Practice 6</h3><h4 id="Prob1"><a href="#Prob1" class="headerlink" title="Prob1"></a>Prob1</h4><p>In ucore, we can find the gatedesc at &#x2F;kern&#x2F;mm&#x2F;mmu.h.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/* Gate descriptors for interrupts and traps */</span><br><span class="line">struct gatedesc &#123;</span><br><span class="line">    unsigned gd_off_15_0 : 16;        // low 16 bits of offset in segment</span><br><span class="line">    unsigned gd_ss : 16;            // segment selector</span><br><span class="line">    unsigned gd_args : 5;            // # args, 0 for interrupt/trap gates</span><br><span class="line">    unsigned gd_rsv1 : 3;            // reserved(should be zero I guess)</span><br><span class="line">    unsigned gd_type : 4;            // type(STS_&#123;TG,IG32,TG32&#125;)</span><br><span class="line">    unsigned gd_s : 1;                // must be 0 (system)</span><br><span class="line">    unsigned gd_dpl : 2;            // descriptor(meaning new) privilege level</span><br><span class="line">    unsigned gd_p : 1;                // Present</span><br><span class="line">    unsigned gd_off_31_16 : 16;        // high bits of offset in segment</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>According to the structure, we can know that an item consist of 64bit aka 8bytes.<br>The low 16-32 bits saved the segment selector and we can use this to query segdesc from the GDT so that we can get the segment base addr.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/tags/">Topics</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">1.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-1"><span class="toc-number">1.1.</span> <span class="toc-text">Practice 1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob-1"><span class="toc-number">1.1.1.</span> <span class="toc-text">Prob 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob-2"><span class="toc-number">1.1.2.</span> <span class="toc-text">Prob 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pratice-2-amp-3"><span class="toc-number">1.2.</span> <span class="toc-text">Pratice 2 &amp; 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pratice-4"><span class="toc-number">1.3.</span> <span class="toc-text">Pratice 4</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob-1-1"><span class="toc-number">1.3.1.</span> <span class="toc-text">Prob 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob-2-1"><span class="toc-number">1.3.2.</span> <span class="toc-text">Prob 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-5"><span class="toc-number">1.4.</span> <span class="toc-text">Practice 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-6"><span class="toc-number">1.5.</span> <span class="toc-text">Practice 6</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prob1"><span class="toc-number">1.5.1.</span> <span class="toc-text">Prob1</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&text=Operating System | Ucore-Lab1"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&is_video=false&description=Operating System | Ucore-Lab1"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab1&body=Check out this article: https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&name=Operating System | Ucore-Lab1&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://rex-mao.github.io/2020/06/23/Operating-System-Ucore-Lab1/&t=Operating System | Ucore-Lab1"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <div class="py4">
+          <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2022
+    Rex
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        </div>
+    </div>
+  </div>
+  <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+  <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
