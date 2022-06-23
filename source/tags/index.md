@@ -1,4 +1,5 @@
 ---
 title: tags
+type: "tags"
 date: 2022-05-02 14:03:10
 ---
