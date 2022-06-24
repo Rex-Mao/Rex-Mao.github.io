@@ -35,4 +35,4 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid 
 ```
 
 ## Relationship
-Every charset maybe contain one and more encodings, like Unicode. Unicode charset has utf-8, utf-16, ucs-2 encodings.
+Every charset maybe contain one or more encodings, like Unicode. Unicode charset has utf-8, utf-16, ucs-2 encodings.
