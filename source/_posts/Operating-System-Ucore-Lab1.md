@@ -42,7 +42,7 @@ By the code, we can see that Makefile use gcc to do the compile operation to the
 We can get the check logic of the image from the tools/sign.c. It shows us that an image size should less than 510 bytes and end with 0x55, oxAA.
 
 ### Pratice 2 & 3
-In those pratices, we can use gdb to debug the bootblock. What we can see is, the cpu load the 0x7c00 for the first command. It does something init like register eax, ds, es, ss. Then, it will enable the A20 which is use to be compatible with the low address(20bits) when we use some high address(like 32bits). If we don't get A20 enable, the address higher than 1MB(1088kb) will be wrapped around to zero by default in real mode. So when we get A20 enabled, we can use the higer address. Prepare the gdt and gdtdesc structure then use lgdt command to transport them to registers. Then set CR0 register (protected mode) to 1 so that we get protected mode enabled. Prepare the registers under the protected mode, at this time, we finished the processor begins to execute 32-bit code. Now we can totally do operations under it. Set the ebp and esp then we can call bootmain.c.
+In those pratices, we used gdb to debug the bootblock. What we can see is, the cpu load the 0x7c00 for the first command. It does something init like register eax, ds, es, ss. Then, it would enable the A20 mode to be compatible with the low address(20bits) for using high address(like 32bits). If we don't get A20 mode enabled, the address higher than 1MB(1088kb) will be wrapped around to zero by default in real mode. Next, prepare the gdt and gdtdesc structure then use lgdt command to transport them to registers. Then set CR0 register (protected mode) to 1 so that we got protected mode enabled. After the registers under the protected mode prepared, at this time, we had finished processor preparation to execute code with 32-bit address. Next, we will set the ebp and esp registers so that can execute bootmain.c.
 
 ### Pratice 4
 
@@ -50,12 +50,12 @@ In those pratices, we can use gdb to debug the bootblock. What we can see is, th
 Wait for the disk ready, and then use the supported method of hardware like outb (outb(..., 0x20)) to send the command to read sectors. Use insl to read a sector from the io.
 
 #### Prob 2
-First, we use the readseg method to load the ELFHDR from the kernel image(disk) to the virtual address @va. Then we use the the info stored in the ELFHDR to load the program content to the @va. Then the bootloader will call the entry point of kernel from the ELF Header so that the kernel code will take over.
+First, we use the readseg method to load the ELFHDR from the kernel image(disk) to the virtual address @va. Then we use the the info stored in the ELFHDR to load the program content to the @va. Then the bootloader will call the entry point of kernel from the ELF Header so that the kernel code will take over the hardware.
 
 ### Practice 5
-In this practice, we can use ebp and eip cleverly to trace the stackframe step by step. What we should to do is getting the current ebp value. Its value contains the last func ebp addr before it. We can also use this ebp value to get the func params(esp+2) and eip value (the addr which can return to last func(esp+1)). We can trace by those registers layer by layer until reach the ebp=0(means the addr which the bootloader start the kernel) or the STACKFRAME_DEPTH.
+In this practice, we can use ebp and eip cleverly to trace the stackframe step by step. What we should to do is getting the current ebp value. Its value contains the last function ebp address before it. We can also use this ebp value to get the function params(esp+2) and eip value (the address which can return to last function(esp+1)). We can trace by those registers layer by layer until reach the ebp=0(means the address which the bootloader start the kernel) or the STACKFRAME_DEPTH.
 - PS
-    - Function Stack is built from high addr to low addr, so that we can use like esp+1 to get the last eip value(the addr which can return to last func to go on the processing)
+    - Function Stack is built from high address to low address, so that we can use esp+1 to get the last eip register value(the address which can return to last function to resume the processing)
 
 ### Practice 6
 
@@ -76,4 +76,4 @@ struct gatedesc {
 };
 ```
 According to the structure, we can know that an item consist of 64bit aka 8bytes.
-The low 16-32 bits saved the segment selector and we can use this to query segdesc from the GDT so that we can get the segment base addr.
+The low 16-32 bits saved the segment selector and we can use this to query segdesc from the GDT so that we can get the segment base address.

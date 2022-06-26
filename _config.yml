@@ -5,7 +5,7 @@
 # Site
 title: Rex.blog 
 subtitle: 'Rex.blog'
-description: 'Reocrd something stupid...'
+description: 'Record something stupid...'
 keywords: [RexStudio, Tech]
 author: Rex
 language: en
@@ -40,7 +40,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false # false: absolute address to the website root, true: a relative address to the abstract root, always used to the reverse proxy
 future: true
 highlight:
