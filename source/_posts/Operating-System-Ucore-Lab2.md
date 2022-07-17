@@ -48,7 +48,7 @@ tags:
 ## Practices & Conclusion
 
 ### Practice 0
-For achieving the lab2 better, we need use diff and patch to merge the code from lab1.
+For achieving the lab2 better, we need to use diff and patch to merge the code from lab1.
 - diff
     ```
     diff -Nu lab2/kern/debug/kdebug.c lab1/kern/debug/kdebug.c >> lab_merge.patch
