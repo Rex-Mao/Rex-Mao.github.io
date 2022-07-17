@@ -15,7 +15,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://rex-mao.github.io/images/SegmentedPaging.png">
 <meta property="article:published_time" content="2022-07-05T18:05:40.000Z">
-<meta property="article:modified_time" content="2022-07-05T18:15:20.924Z">
+<meta property="article:modified_time" content="2022-07-17T11:12:53.940Z">
 <meta property="article:author" content="Rex">
 <meta property="article:tag" content="Operating System">
 <meta name="twitter:card" content="summary">
@@ -120,8 +120,10 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" aria-label="Previous post" href="/2022/07/17/Operating-System-Ucore-Lab3/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
-        <li><a class="icon" aria-label="Next post" href="/2020/06/23/Operating-System-Ucore-Lab1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/06/23/Operating-System-Ucore-Lab1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -207,7 +209,7 @@
 <ul>
 <li><img src="/images/SegmentedPaging.png" alt="Segmented Paging Memory Management"></li>
 </ul>
-<h2 id="Practices-amp-Conclusion"><a href="#Practices-amp-Conclusion" class="headerlink" title="Practices &amp; Conclusion"></a>Practices &amp; Conclusion</h2><h3 id="Practice-0"><a href="#Practice-0" class="headerlink" title="Practice 0"></a>Practice 0</h3><p>For achieving the lab2 better, we need use diff and patch to merge the code from lab1.</p>
+<h2 id="Practices-amp-Conclusion"><a href="#Practices-amp-Conclusion" class="headerlink" title="Practices &amp; Conclusion"></a>Practices &amp; Conclusion</h2><h3 id="Practice-0"><a href="#Practice-0" class="headerlink" title="Practice 0"></a>Practice 0</h3><p>For achieving the lab2 better, we need to use diff and patch to merge the code from lab1.</p>
 <ul>
 <li>diff  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">diff -Nu lab2/kern/debug/kdebug.c lab1/kern/debug/kdebug.c &gt;&gt; lab_merge.patch</span><br><span class="line">-N treat absent files as empty</span><br><span class="line">-u unified style, if your system lacks it or if recipient may not have it, use &quot;-c&quot;</span><br><span class="line">-r recursive, so do subdirectories</span><br></pre></td></tr></table></figure></li>
 <li>patch  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">patch -p0 &lt; ../lab_merge.patch</span><br><span class="line">-s == silent except errors</span><br><span class="line">-p0 == needed to find the proper folder</span><br><span class="line">PS: use cd to origin path and use -p param to strip the path, like lab2/kern/debug/kdebug.c =&gt; -p1 = kern/debug/kdebug.c</span><br></pre></td></tr></table></figure></li>
