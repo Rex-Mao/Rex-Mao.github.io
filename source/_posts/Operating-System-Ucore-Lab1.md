@@ -9,7 +9,7 @@ tags:
 
 ### Practice 1
 
-#### Prob 1
+#### Problem 1
 By the code, we can see that Makefile use gcc to do the compile operation to the source code with some libs step by step and output some object(.o) files. And then it uses ld to link those .o files and produce an executable object(obj/bootblock.out). Then use sign tools to generate a standard bootclock.o. Finally, use dd to generate an ucore.img file.
 - PS
     - The ld command, also called the linkage editor or binder, combines object files, archives, and import files into one output object file, resolving external references. It produces an executable object file that can be run.
@@ -38,7 +38,7 @@ By the code, we can see that Makefile use gcc to do the compile operation to the
 
     ```
 
-#### Prob 2
+#### Problem 2
 We can get the check logic of the image from the tools/sign.c. It shows us that an image size should less than 510 bytes and end with 0x55, oxAA.
 
 ### Pratice 2 & 3
@@ -46,10 +46,10 @@ In those pratices, we used gdb to debug the bootblock. What we can see is, the c
 
 ### Pratice 4
 
-#### Prob 1
+#### Problem 1
 Wait for the disk ready, and then use the supported method of hardware like outb (outb(..., 0x20)) to send the command to read sectors. Use insl to read a sector from the io.
 
-#### Prob 2
+#### Problem 2
 First, we use the readseg method to load the ELFHDR from the kernel image(disk) to the virtual address @va. Then we use the the info stored in the ELFHDR to load the program content to the @va. Then the bootloader will call the entry point of kernel from the ELF Header so that the kernel code will take over the hardware.
 
 ### Practice 5
@@ -59,7 +59,7 @@ In this practice, we can use ebp and eip cleverly to trace the stackframe step b
 
 ### Practice 6
 
-#### Prob 1
+#### Problem 1
 In ucore, we can find the gatedesc at /kern/mm/mmu.h.
 ```
 /* Gate descriptors for interrupts and traps */

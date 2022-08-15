@@ -103,7 +103,7 @@ We can use page_link of free_list to get the page descriptor with function le2pa
 
 ### Practice 2
 
-#### Prob 1
+#### Problem 1
 A linear address 'la' has a three-part structure as follows:
 ```
 // +--------10------+-------10-------+---------12----------+
@@ -123,13 +123,13 @@ pte = (physical_address  & ~0x0FFF) | PTE_P | PTE_W
 ```
 In ucore, we would need la and those two struct to get an physical address. What's more important is we can change the pte value to change the mapping of the virtual address and physical address(physical page frame).
 
-#### Prob 2
+#### Problem 2
 When the processor visit an nonexistent page, a page fault(#PF) will happen. An interrupt will be triggered, then the interrupt handling service will be pushed to the stack and executed. If the visit is valid then the service will alloc a new page for the visit and refresh the TLB. Finally, call the iret to interrupt and jump back to the exception address and go on process.
 
 ### Practice 3
 
-#### Prob 1
+#### Problem 1
 There is a mapping relation existed. We can use pa stored in pte to get the page descriptor.
 
-#### Prob 2
+#### Problem 2
 We can refresh the gdt to make va = la - 0xC0000000.
