@@ -6,7 +6,7 @@ tags:
 ---
 
 ## Presupposition
-In this lab, we will not differ (process, thread) and (pcb, tcb). Because based on the presupposition, we can just create thread in kernel.
+In this lab, we will not differ (process, thread) and (pcb, tcb). Because based on the presupposition, we can just create kernel thread.
 
 ## Practices & Conclusion
 
