@@ -116,7 +116,43 @@ Notice:
 - Step 3 has decided the way to operating the memory, duplicate or use same one with its parent.
 
 #### Problem 2
-Ucore can assign an unique process id for each process control block. Step 5 in Prob.1 has shown us that it will do the assigning opertion with interrupt disabled by command ```local_intr_save(intr_flag)```, because of that, cpu will not be rescheduled to other threads or processes until ```local_intr_restore(intr_flag)``` called.
+Ucore can assign an unique process id for each process control block. First, Step 5 in Prob.1 has shown us that it will do the assigning opertion with interrupt disabled by command ```local_intr_save(intr_flag)```, because of that, cpu will not be rescheduled to other threads or processes until ```local_intr_restore(intr_flag)``` called. Secondly, the logic of ```get_pid()```, which use two parameters ```last_pid``` and ```next_safe``` to ensure a safe interval can be used, ensures an unique pid assigned with an acceptable time complexity.
+```
+// get_pid - alloc a unique pid for process
+static int
+get_pid(void) {
+    static_assert(MAX_PID > MAX_PROCESS);
+    struct proc_struct *proc;
+    list_entry_t *list = &proc_list, *le;
+    static int next_safe = MAX_PID, last_pid = MAX_PID;
+    if (++ last_pid >= MAX_PID) {
+        last_pid = 1;
+        goto inside;
+    }
+    if (last_pid >= next_safe) {
+    inside:
+        next_safe = MAX_PID;
+    repeat:
+        le = list;
+        while ((le = list_next(le)) != list) {
+            proc = le2proc(le, list_link);
+            if (proc->pid == last_pid) {
+                if (++ last_pid >= next_safe) {
+                    if (last_pid >= MAX_PID) {
+                        last_pid = 1;
+                    }
+                    next_safe = MAX_PID;
+                    goto repeat;
+                }
+            }
+            else if (proc->pid > last_pid && next_safe > proc->pid) {
+                next_safe = proc->pid;
+            }
+        }
+    }
+    return last_pid;
+}
+```
 
 ### Practice 3
 
