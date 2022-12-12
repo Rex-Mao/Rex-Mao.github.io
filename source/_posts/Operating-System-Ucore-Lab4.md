@@ -31,7 +31,7 @@ In this lab, we will not differ (process, thread) and (pcb, tcb). Because based 
     };
     ```
 
-- The context struct is used for saving registers for switching the running process
+- The context struct is used for saving or restoring registers when switching the running process, it records the context of one process. We save the fork return address as ```context.eip```, so the newly process will start at fork return in this lab.
     ```
     struct context {
         uint32_t eip;
@@ -45,7 +45,7 @@ In this lab, we will not differ (process, thread) and (pcb, tcb). Because based 
     };
     ```
 
-- The trapframe struct can be writen when interrupt occurred, cpu will reset to run the ISR and find the corresponding handler. Then the trapframe would be used to parse and handle the interrupt.
+- The trapframe struct can be writen when interrupt occurred, cpu will reset to run the ISR and find the corresponding handler. Then the trapframe would be used to parse and handle the interrupt. In this lab, we use trapframe as the first stack frame to initialize the process stack, so that when newly process starting at fork return address and jumping to trapret func, trapret will reset the current esp to trapframe.tf_esp, when iret done, cpu will be set up totally to run the ```kernel_thread_entry``` which is a wrapped function to redirect the function what we request before.
     ```
     struct trapframe {
         struct pushregs tf_regs;
@@ -113,7 +113,7 @@ The following codes had shown the processing of do_fork().
     ret = proc->pid;
 ```
 Notice: 
-- Step 3 has decided the way to operating the memory, duplicate or use same one with its parent.
+- Step 3 has decided the way to operating the memory, duplicate or share with its parent.
 
 #### Problem 2
 Ucore can assign an unique process id for each process control block. First, Step 5 in Prob.1 has shown us that it will do the assigning opertion with interrupt disabled by command ```local_intr_save(intr_flag)```, because of that, cpu will not be rescheduled to other threads or processes until ```local_intr_restore(intr_flag)``` called. Secondly, the logic of ```get_pid()```, which use two parameters ```last_pid``` and ```next_safe``` to ensure a safe interval can be used, ensures an unique pid assigned with an acceptable time complexity.
@@ -158,7 +158,7 @@ get_pid(void) {
 
 #### Problem 1
 In lab4, ucore created 2 processes: idle and init. 
-Ucore created a pcb named ```idle``` in the final stages then it set current process to idle. Idle process is used to run in idle status or switch the running processes. Init process is used to print string. When the ucore running to cpu idle, the control will be handed to idle or another processes which is can be scheduled.
+Ucore created a pcb named ```idle``` in the final stages then it set current process to idle. Idle process is used to run in idle status or switch the running processes. Init process is just used to print string in this lab, it will change to be more functional in the following labs. When the ucore running to cpu idle, the control will be handed to idle or another processes which is can be scheduled.
 
 #### Problem 2
 Codes of proc_run:
@@ -181,4 +181,4 @@ proc_run(struct proc_struct *proc) {
     }
 }
 ```
-In these codes, ```local_intr_save(intr_flag)``` and ```local_intr_restore(intr_flag)``` disabled the interrupt to ensure cpu executing commands in an atomic status which means it can not be interrputted. Because of that, registers of cpu can be reset with security. 
+In these codes, ```local_intr_save(intr_flag)``` and ```local_intr_restore(intr_flag)``` disabled the interrupt to ensure cpu executing commands in an atomic status which means it can not be interrputted. Because of that, registers of cpu can be restore and reset with security. 

@@ -9,7 +9,7 @@ tags:
 1. First we should notice a 32-bits register can store 2^32 different RAM addresses. Each RAM address corresponds to a Byte(8 bits) in modern RAMs. So a 32-bit register can corresponds (2^32 * 2^3) which equals 4GB.
 2. About the kernel boot and memory detect, init, map processing are as follow.
     1. What we should know secondly is, before the kernal started, the bootloader had enable the a20 and protected segment mode. After that we got a mapping (VA = LA = PA) with base addr 0x0. 
-    2. In kernel.ld, it defined the new base, data, bss addrress under the segment mode by lgdt. 
+    2. In kernel.ld, it defined the new base, text(code/text segment), data(it used for store initalized global varibles), bss(Block Started by Symbol, segment bss is a memory space used for store the un-initalize global varibles, it belongs to static memory allocation) addrress under the segment mode by lgdt. 
     3. After loading kernel.ld and executing the entry.S had modified the based addr to 0xC0000000. They tune the kernel start linked addr to virtual address(VA) 0xC0100000. Of course, this VA(0xC0100000) mapping to the PA (0x00100000 = 1*(2^4)^5 = 2^20 RAM addresses, 2^20B = 1MB size in RAM memory). We had achieved the mapping (VA|LA = PA + 0xC0000000).
     4. Detect the physical memory layout by e820 then map and init pages descriptors and the free page list Now, we can use alloc and free opertions of pages.
     5. Alloc a page frame(4KB) for boot_pgdir(virtual address corresponds to this page frame) and use it to store the page table. 4KB can store 1024 ptes(32bit, 4B), which means 1024 * 4B = 4MB physical memory. Set its physical memory address to boot_pgdir[PDX(VPT)] which points itself in virtual page table.
