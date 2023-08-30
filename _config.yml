@@ -107,5 +107,5 @@ deploy:
   type: git
 ##  repo: https://github.com/Rex-Mao/Rex-Mao.github.io
   repo: git@github.com:Rex-Mao/Rex-Mao.github.io
-  branch: started
+  branch: main
   message: "Blogs had been auto deployed"
