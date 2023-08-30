@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Presupposition Virtual Memory Layout is shown as follow  Virtual memory area (VMA) The kernel uses virtual memory areas to keep track of the process’s memory mappings; for example, a process has one V">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Operating System | Ucore-Lab3">
+<meta property="og:url" content="https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/">
+<meta property="og:site_name" content="Rex.blog">
+<meta property="og:description" content="Presupposition Virtual Memory Layout is shown as follow  Virtual memory area (VMA) The kernel uses virtual memory areas to keep track of the process’s memory mappings; for example, a process has one V">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.rexcap.cn/images/VirtualMemoryLayout.png">
+<meta property="og:image" content="https://blog.rexcap.cn/images/DemandFetchingAndPageFault.png">
+<meta property="article:published_time" content="2021-07-17T11:00:21.000Z">
+<meta property="article:modified_time" content="2023-08-30T03:52:53.509Z">
+<meta property="article:author" content="Rex">
+<meta property="article:tag" content="Operating System">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.rexcap.cn/images/VirtualMemoryLayout.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Operating System | Ucore-Lab3</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="banner">
+<div id="blogtitel" class="blogtitel">Rex.blog</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+  
+  <div class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/07/21/Operating-System-Ucore-Lab4/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/07/06/Operating-System-Ucore-Lab2/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&text=Operating System | Ucore-Lab3"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&is_video=false&description=Operating System | Ucore-Lab3"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab3&body=Check out this article: https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&name=Operating System | Ucore-Lab3&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&t=Operating System | Ucore-Lab3"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Presupposition"><span class="toc-number">1.</span> <span class="toc-text">Presupposition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-0"><span class="toc-number">2.1.</span> <span class="toc-text">Practice 0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prcatice-1"><span class="toc-number">2.2.</span> <span class="toc-text">Prcatice 1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2"><span class="toc-number">2.2.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prcatice-2"><span class="toc-number">2.3.</span> <span class="toc-text">Prcatice 2</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Operating System | Ucore-Lab3
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Rex</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-07-17T11:00:21.000Z" itemprop="datePublished">2021-07-17</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Operating-System/" rel="tag">Operating System</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Presupposition"><a href="#Presupposition" class="headerlink" title="Presupposition"></a>Presupposition</h2><ol>
+<li>Virtual Memory Layout is shown as follow<br> <img src="/images/VirtualMemoryLayout.png" alt="VirtualMemoryLayout"></li>
+<li>Virtual memory area (VMA)<br> The kernel uses virtual memory areas to keep track of the process’s memory mappings; for example, a process has one VMA for its code, one VMA for each type of data, one VMA for each distinct memory mapping (if any), and so on. VMAs are processor-independent structures, with permissions and access control flags. Each VMA has a start address, a length, and their sizes are always a multiple of the page size (PAGE_SIZE). A VMA consists of a number of pages, each of which has an entry in the page table.</li>
+<li>VMA Addition and Removal<ul>
+<li>Occurs whenever a new file is mmaped, a new shared memory segment is created, or a new section is created (e.g.,library, code, heap, stack)</li>
+<li>Kernel tries to merge with adjacent sections</li>
+</ul>
+</li>
+<li>Demand Fetching and Page Fault<ul>
+<li><img src="/images/DemandFetchingAndPageFault.png" alt="DemandFetchingAndPageFault"></li>
+</ul>
+</li>
+<li>Copy on Write<ul>
+<li>PTE entry is marked as un-writeable</li>
+<li>But VMA is marked as writeable</li>
+<li>Page fault handler notices difference<ul>
+<li>Must mean CoW</li>
+<li>Make a duplicate of physical page</li>
+<li>Update PTEs, flush TLB entry</li>
+<li>do_wp_page</li>
+</ul>
+</li>
+<li>How does COW work?<ul>
+<li>Memory regions:<ul>
+<li>New copies of all VMAs are allocated for child during fork</li>
+<li>As are page tables</li>
+</ul>
+</li>
+<li>Pages in memory:<ul>
+<li>In page table (and in-memory representation), clear write bit, set COW bit</li>
+<li>Is the COW bit hardware specified?</li>
+<li>No, OS uses one of the available bits in the PTE</li>
+<li>But it does not have to; can just keep the info in the VMA like other meta data</li>
+<li>Make a new, writeable copy on a write page fault</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>PFRA(Page Frame Reclaim Algorithm) invoked on three different occasions:<ul>
+<li>Kernel detects low on memory condition<ul>
+<li>E.g., during alloc_pages</li>
+</ul>
+</li>
+<li>Periodic reclaiming<ul>
+<li>kernel thread kswapd</li>
+</ul>
+</li>
+<li>Hibernation reclaiming<ul>
+<li>for suspend-to-disk</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="Practices-amp-Conclusion"><a href="#Practices-amp-Conclusion" class="headerlink" title="Practices &amp; Conclusion"></a>Practices &amp; Conclusion</h2><h3 id="Practice-0"><a href="#Practice-0" class="headerlink" title="Practice 0"></a>Practice 0</h3><p>Use software - meld to merge the codes. ^-^, better than diff &amp; patch command!</p>
+<h3 id="Prcatice-1"><a href="#Prcatice-1" class="headerlink" title="Prcatice 1"></a>Prcatice 1</h3><h4 id="Problem-1"><a href="#Problem-1" class="headerlink" title="Problem 1"></a>Problem 1</h4><p>First, we should know the consist of the Page Directory&#x2F;Table Entry.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/* page table/directory entry flags */</span><br><span class="line">#define PTE_P           0x001                   // Present</span><br><span class="line">#define PTE_W           0x002                   // Writeable</span><br><span class="line">#define PTE_U           0x004                   // User</span><br><span class="line">#define PTE_PWT         0x008                   // Write-Through</span><br><span class="line">#define PTE_PCD         0x010                   // Cache-Disable</span><br><span class="line">#define PTE_A           0x020                   // Accessed</span><br><span class="line">#define PTE_D           0x040                   // Dirty</span><br><span class="line">#define PTE_PS          0x080                   // Page Size</span><br><span class="line">#define PTE_MBZ         0x180                   // Bits must be zero</span><br><span class="line">#define PTE_AVAIL       0xE00                   // Available for software use</span><br><span class="line">                                                // The PTE_AVAIL bits aren&#x27;t used by the kernel or interpreted by the</span><br><span class="line">                                                // hardware, so user processes are allowed to set them arbitrarily.</span><br></pre></td></tr></table></figure>
+<p>Accroding to this description, when we want to check or alloc pde&#x2F;pte, we can easily know the present, writeable, user flags, etc. The present flag can be used when doing page reclamation to check if the virtual page is in page frame which the pde&#x2F;pte mapped. With using of the writeable flages and vma flags, CoW(Copy on Write) can be implemented.</p>
+<h4 id="Problem-2"><a href="#Problem-2" class="headerlink" title="Problem 2"></a>Problem 2</h4><p>When page fault raised, some handling operations for exceptions should be done by the hardwares. Cpu will save the exception linear address to the CR2 register and backup the current context in the kernel stack (push the EFLAGS, CS, EIP, errCode). Then load the interrupt service address to cs and eip to run the corresponding handling services. After the fault handled, cpu need to restore the registers and exception application context.</p>
+<h3 id="Prcatice-2"><a href="#Prcatice-2" class="headerlink" title="Prcatice 2"></a>Prcatice 2</h3><p>The current swap manager can support the extended clock ALGO.</p>
+<ol>
+<li><p>Extended clock ALGO.</p>
+<p> It can be implemented by adding a “second chance” bit to each memory frame, every time the frame is considered (due to a reference made to the page inside it), this bit is set to 1, which gives the page a second chance, as when we consider the candidate page for replacement, we replace the first one with this bit set to 0 (while zeroing out bits of the other pages we see in the process). Thus, a page with the “second chance” bit set to 1 is never replaced during the first consideration and will only be replaced if all the other pages deserve a second chance too!</p>
+</li>
+<li><p>Timing to swap-in or swap-out</p>
+<p> We can use PTE to record the second bit (dirty bit) and differ those pages. Swap out had two different way to achieve, positive and negative way. The positive way means that operating system will check the page table periodly and do the swap in or out operations, it can be implemented by the clock interrup. The negative way corresponds that swap in or out the target page when using. What we should notice is, when doing swap-out operations, we need to swap it out to the disk directly or record the changes when a dirty page (which is changed in memory) to merge several changes.</p>
+</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/tags/">Topics</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Presupposition"><span class="toc-number">1.</span> <span class="toc-text">Presupposition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-0"><span class="toc-number">2.1.</span> <span class="toc-text">Practice 0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prcatice-1"><span class="toc-number">2.2.</span> <span class="toc-text">Prcatice 1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2"><span class="toc-number">2.2.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prcatice-2"><span class="toc-number">2.3.</span> <span class="toc-text">Prcatice 2</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&text=Operating System | Ucore-Lab3"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&is_video=false&description=Operating System | Ucore-Lab3"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab3&body=Check out this article: https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&title=Operating System | Ucore-Lab3"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&name=Operating System | Ucore-Lab3&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.rexcap.cn/2021/07/17/Operating-System-Ucore-Lab3/&t=Operating System | Ucore-Lab3"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <div class="py4">
+          <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    Rex
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        </div>
+    </div>
+  </div>
+  <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+  <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

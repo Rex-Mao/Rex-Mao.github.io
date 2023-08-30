@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="PresuppositionSome tips in assembly language AT&amp;T verus Intel12OP-code dst src &#x2F;&#x2F;IntelOP-code src dst &#x2F;&#x2F;AT&amp;T int : means making an interrupt123456789101112131415To make a system call on the x8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Operating System | Ucore-Lab1">
+<meta property="og:url" content="https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/">
+<meta property="og:site_name" content="Rex.blog">
+<meta property="og:description" content="PresuppositionSome tips in assembly language AT&amp;T verus Intel12OP-code dst src &#x2F;&#x2F;IntelOP-code src dst &#x2F;&#x2F;AT&amp;T int : means making an interrupt123456789101112131415To make a system call on the x8">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.rexcap.cn/images/MemoryLayout.jpg">
+<meta property="og:image" content="https://blog.rexcap.cn/images/FunctionStackFrame.jpg">
+<meta property="article:published_time" content="2021-06-23T01:06:27.000Z">
+<meta property="article:modified_time" content="2023-08-30T03:52:53.508Z">
+<meta property="article:author" content="Rex">
+<meta property="article:tag" content="Operating System">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.rexcap.cn/images/MemoryLayout.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Operating System | Ucore-Lab1</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="banner">
+<div id="blogtitel" class="blogtitel">Rex.blog</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+  
+  <div class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/07/06/Operating-System-Ucore-Lab2/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2020/06/17/Charset-Encoding/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&text=Operating System | Ucore-Lab1"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&is_video=false&description=Operating System | Ucore-Lab1"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab1&body=Check out this article: https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&name=Operating System | Ucore-Lab1&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&t=Operating System | Ucore-Lab1"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Presupposition"><span class="toc-number">1.</span> <span class="toc-text">Presupposition</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Some-tips-in-assembly-language"><span class="toc-number">1.1.</span> <span class="toc-text">Some tips in assembly language</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Some-usages-of-registers"><span class="toc-number">1.2.</span> <span class="toc-text">Some usages of registers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Some-terminologies"><span class="toc-number">1.3.</span> <span class="toc-text">Some terminologies</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-1"><span class="toc-number">2.1.</span> <span class="toc-text">Practice 1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2"><span class="toc-number">2.1.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pratice-2-amp-3"><span class="toc-number">2.2.</span> <span class="toc-text">Pratice 2 &amp; 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pratice-4"><span class="toc-number">2.3.</span> <span class="toc-text">Pratice 4</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-5"><span class="toc-number">2.4.</span> <span class="toc-text">Practice 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-6"><span class="toc-number">2.5.</span> <span class="toc-text">Practice 6</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1-2"><span class="toc-number">2.5.1.</span> <span class="toc-text">Problem 1</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Operating System | Ucore-Lab1
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Rex</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-06-23T01:06:27.000Z" itemprop="datePublished">2021-06-23</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Operating-System/" rel="tag">Operating System</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Presupposition"><a href="#Presupposition" class="headerlink" title="Presupposition"></a>Presupposition</h2><h3 id="Some-tips-in-assembly-language"><a href="#Some-tips-in-assembly-language" class="headerlink" title="Some tips in assembly language"></a>Some tips in assembly language</h3><ol>
+<li>AT&amp;T verus Intel<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">OP-code dst src //Intel</span><br><span class="line">OP-code src dst //AT&amp;T</span><br></pre></td></tr></table></figure></li>
+<li>int : means making an interrupt<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">To make a system call on the x86, a program invokes the int n instruction, where</span><br><span class="line">n specifies the index into the IDT. The int instruction performs the following steps:</span><br><span class="line">• Fetch the n’th descriptor from the IDT, where n is the argument of int.</span><br><span class="line">• Check that CPL in %cs is &lt;= DPL, where DPL is the privilege level in the de-</span><br><span class="line">scriptor.</span><br><span class="line">• Save %esp and %ss in CPU-internal registers, but only if the target segment selec-</span><br><span class="line">tor’s PL &lt; CPL.</span><br><span class="line">• Load %ss and %esp from a task segment descriptor.</span><br><span class="line">• Push %ss.</span><br><span class="line">• Push %esp.</span><br><span class="line">• Push %eflags.</span><br><span class="line">• Push %cs.</span><br><span class="line">• Push %eip.</span><br><span class="line">• Clear some bits of %eflags.</span><br><span class="line">• Set %cs and %eip to the values in the descriptor.</span><br></pre></td></tr></table></figure></li>
+<li>extended inline assembly<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">asm ( assembler template</span><br><span class="line">    : output operands               -- optional --</span><br><span class="line">    : input operands                -- optional --</span><br><span class="line">    : list of clobbered registers   -- optional --</span><br><span class="line">);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Some-usages-of-registers"><a href="#Some-usages-of-registers" class="headerlink" title="Some usages of registers"></a>Some usages of registers</h3><ol>
+<li><p>General Registers</p>
+<ul>
+<li>AX (accumulator) ： use to accumulate</li>
+<li>BX (base) ： base register, use to index the address</li>
+<li>CX (count) ： counter</li>
+<li>DX (data) ： use to data transfer</li>
+</ul>
+</li>
+<li><p>Segment and pointer Reisters</p>
+<ul>
+<li>CS (code segment)</li>
+<li>DS (data segment)</li>
+<li>SS (stack segment)</li>
+<li>ES (extra segment)</li>
+<li>IP (instruction pointer)</li>
+<li>SP (stack pointer)</li>
+<li>BP (base pointer)</li>
+</ul>
+</li>
+</ol>
+<h3 id="Some-terminologies"><a href="#Some-terminologies" class="headerlink" title="Some terminologies"></a>Some terminologies</h3><ul>
+<li>PIC : Programmable Interrupt Controller</li>
+</ul>
+<h2 id="Practices-amp-Conclusion"><a href="#Practices-amp-Conclusion" class="headerlink" title="Practices &amp; Conclusion"></a>Practices &amp; Conclusion</h2><h3 id="Practice-1"><a href="#Practice-1" class="headerlink" title="Practice 1"></a>Practice 1</h3><h4 id="Problem-1"><a href="#Problem-1" class="headerlink" title="Problem 1"></a>Problem 1</h4><p>By the code, we can see that Makefile use gcc to do the compile operation to the source code with some libs step by step and output some object(.o) files. And then it uses ld to link those .o files and produce an executable object(obj&#x2F;bootblock.out). Then use sign tools to generate a standard bootblock.o. Finally, use dd to generate an ucore.img file.</p>
+<ul>
+<li>PS<ul>
+<li>The ld command, also called the linkage editor or binder, combines object files, archives, and import files into one output object file, resolving external references. It produces an executable object file that can be run.</li>
+<li>dd is a command-line utility for Unix and Unix-like operating systems whose primary purpose is to convert and copy files.</li>
+</ul>
+</li>
+<li>From web  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GCC</span><br><span class="line">    -g  //add gdb debug info</span><br><span class="line">    -Wall  //to show the warnning info</span><br><span class="line">    -O2  //optimize processing (0，1，2，3，0 for no optimized)</span><br><span class="line">    -fno-builtin  //only accept the builtin function start with &quot;__&quot;</span><br><span class="line">    -ggdb  //let gcc generate more debug info for gdb</span><br><span class="line">    -m32  //build 32bits program</span><br><span class="line">    -gstabs  //generate debug info in stabs style without gdb debug info</span><br><span class="line">    -nostdinc  //do Not search header files in standard library, but use -l to specify</span><br><span class="line">    -fstack-protector-all  //enable the stack and heap protection, insert protection code for all functions</span><br><span class="line">    -E  //only do pre-handling, will not build and link</span><br><span class="line">    -x c  //specify the C language for explicition</span><br><span class="line"></span><br><span class="line">LDD Flags</span><br><span class="line">    -nostdlib  //do not link the std start and standard files, just transfer the specific file to linker</span><br><span class="line">    -m elf\_i386  //use elf_i386 simulator</span><br><span class="line">    -N  //set segment text and data readable and writable，cancel the page aligen in segment, cancel the link to shared library</span><br><span class="line">    -e func  //set the start point to symbol func</span><br><span class="line">    -Ttext addr  //redirect the start addr to addr when linking(i.e set 0 if not specify this))</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Problem-2"><a href="#Problem-2" class="headerlink" title="Problem 2"></a>Problem 2</h4><p>We can get the check logic of the image from the tools&#x2F;sign.c. It shows us that an image size should less than 510 bytes and end with 0x55, 0xAA.</p>
+<h3 id="Pratice-2-amp-3"><a href="#Pratice-2-amp-3" class="headerlink" title="Pratice 2 &amp; 3"></a>Pratice 2 &amp; 3</h3><p>In those pratices, we used gdb to debug the bootblock. The steps are as follow.</p>
+<ol>
+<li>The BIOS loads this code from the first sector of the hard disk into memory at physical address 0x7c00 and starts executing in real mode with %cs&#x3D;0 %ip&#x3D;7c00, so the cpu load the 0x7c00 for the first command.</li>
+<li>Do something init like register eax, ds, es, ss. </li>
+<li>Enable the A20 mode to be compatible with the low address(20bits) for using high address(like 32bits). If we don’t get A20 mode enabled, the address higher than 1MB(1088kb) will be wrapped around to zero by default in real mode. </li>
+<li>Prepare the gdt and gdtdesc structure then use lgdt command to transport them to registers. </li>
+<li>Set CR0 register (protected mode) to 1 so that we got protected mode enabled.<br>After the registers under the protected mode prepared, at this time, we had finished processor preparation to execute code with 32-bits address. Next, we will set the ebp and esp registers so that can execute bootmain.c.</li>
+</ol>
+<h3 id="Pratice-4"><a href="#Pratice-4" class="headerlink" title="Pratice 4"></a>Pratice 4</h3><h4 id="Problem-1-1"><a href="#Problem-1-1" class="headerlink" title="Problem 1"></a>Problem 1</h4><p>Wait for the disk ready, and then use the supported method of hardware like outb (outb(…, 0x20)) to send the command to read sectors. Use insl to read a sector from the io.</p>
+<h4 id="Problem-2-1"><a href="#Problem-2-1" class="headerlink" title="Problem 2"></a>Problem 2</h4><p>First, we use the readseg method to load the ELFHDR from the kernel image(disk) to the virtual address @va. Then we use the the info stored in the ELFHDR to load the program content to the @va. Then the bootloader will call the entry point of kernel from the ELF Header so that the kernel code will take over the hardware.</p>
+<h3 id="Practice-5"><a href="#Practice-5" class="headerlink" title="Practice 5"></a>Practice 5</h3><p>In this practice, we can use ebp and eip cleverly to trace the stackframe step by step. What we should do is getting the current ebp and eip value. With eip, we can get the debug info in current layer. Ebp’s value contains the last function ebp address before it. We can also use this ebp value to get the function params(ebp+2) and return addr (the address which should jump to when the sub function done, should taken by eip). We can trace those registers layer by layer until reach the ebp&#x3D;0(means the address which the bootloader start the kernel) or the STACKFRAME_DEPTH.</p>
+<ul>
+<li>PS<ul>
+<li>Function Stack is built from high address to low address, so that we can use ebp+1 to get the last eip register value(the address which can return to last function to resume the processing)</li>
+<li>Memory layout<br>  <img src="/images/MemoryLayout.jpg" alt="MemoryLayout"></li>
+<li>Function stack frame<br>  <img src="/images/FunctionStackFrame.jpg" alt="FunctionStackFrame"></li>
+</ul>
+</li>
+</ul>
+<h3 id="Practice-6"><a href="#Practice-6" class="headerlink" title="Practice 6"></a>Practice 6</h3><h4 id="Problem-1-2"><a href="#Problem-1-2" class="headerlink" title="Problem 1"></a>Problem 1</h4><p>In ucore, we can find the gatedesc at &#x2F;kern&#x2F;mm&#x2F;mmu.h.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/* Gate descriptors for interrupts and traps */</span><br><span class="line">struct gatedesc &#123;</span><br><span class="line">    unsigned gd_off_15_0 : 16;        //low 16 bits of offset in segment</span><br><span class="line">    unsigned gd_ss : 16;            //segment selector</span><br><span class="line">    unsigned gd_args : 5;            //# args, 0 for interrupt/trap gates</span><br><span class="line">    unsigned gd_rsv1 : 3;            //reserved(should be zero I guess)</span><br><span class="line">    unsigned gd_type : 4;            //type(STS_&#123;TG,IG32,TG32&#125;)</span><br><span class="line">    unsigned gd_s : 1;                //must be 0 (system)</span><br><span class="line">    unsigned gd_dpl : 2;            //descriptor(meaning new) privilege level</span><br><span class="line">    unsigned gd_p : 1;                //Present</span><br><span class="line">    unsigned gd_off_31_16 : 16;        //high bits of offset in segment</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>According to the structure, we can know that an item consist of 64bit aka 8bytes.<br>The low 16-32 bits saved the segment selector and we can use this to query segdesc from the GDT so that we can get the segment base address.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/tags/">Topics</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Presupposition"><span class="toc-number">1.</span> <span class="toc-text">Presupposition</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Some-tips-in-assembly-language"><span class="toc-number">1.1.</span> <span class="toc-text">Some tips in assembly language</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Some-usages-of-registers"><span class="toc-number">1.2.</span> <span class="toc-text">Some usages of registers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Some-terminologies"><span class="toc-number">1.3.</span> <span class="toc-text">Some terminologies</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-1"><span class="toc-number">2.1.</span> <span class="toc-text">Practice 1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2"><span class="toc-number">2.1.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pratice-2-amp-3"><span class="toc-number">2.2.</span> <span class="toc-text">Pratice 2 &amp; 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pratice-4"><span class="toc-number">2.3.</span> <span class="toc-text">Pratice 4</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-5"><span class="toc-number">2.4.</span> <span class="toc-text">Practice 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-6"><span class="toc-number">2.5.</span> <span class="toc-text">Practice 6</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1-2"><span class="toc-number">2.5.1.</span> <span class="toc-text">Problem 1</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&text=Operating System | Ucore-Lab1"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&is_video=false&description=Operating System | Ucore-Lab1"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab1&body=Check out this article: https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&title=Operating System | Ucore-Lab1"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&name=Operating System | Ucore-Lab1&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.rexcap.cn/2021/06/23/Operating-System-Ucore-Lab1/&t=Operating System | Ucore-Lab1"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <div class="py4">
+          <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    Rex
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        </div>
+    </div>
+  </div>
+  <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+  <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

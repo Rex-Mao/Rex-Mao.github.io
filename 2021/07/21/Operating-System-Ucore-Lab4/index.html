@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="PresuppositionIn this lab, we will not differ (process, thread) and (pcb, tcb). Because based on the presupposition, we can just create kernel thread. Practices &amp; ConclusionPractice 1 The process">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Operating System | Ucore-Lab4">
+<meta property="og:url" content="https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/">
+<meta property="og:site_name" content="Rex.blog">
+<meta property="og:description" content="PresuppositionIn this lab, we will not differ (process, thread) and (pcb, tcb). Because based on the presupposition, we can just create kernel thread. Practices &amp; ConclusionPractice 1 The process">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-07-21T12:22:21.000Z">
+<meta property="article:modified_time" content="2023-08-30T03:52:53.509Z">
+<meta property="article:author" content="Rex">
+<meta property="article:tag" content="Operating System">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Operating System | Ucore-Lab4</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="banner">
+<div id="blogtitel" class="blogtitel">Rex.blog</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+  
+  <div class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/07/17/Operating-System-Ucore-Lab3/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&text=Operating System | Ucore-Lab4"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&is_video=false&description=Operating System | Ucore-Lab4"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab4&body=Check out this article: https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&name=Operating System | Ucore-Lab4&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&t=Operating System | Ucore-Lab4"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Presupposition"><span class="toc-number">1.</span> <span class="toc-text">Presupposition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-1"><span class="toc-number">2.1.</span> <span class="toc-text">Practice 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-2"><span class="toc-number">2.2.</span> <span class="toc-text">Practice 2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2"><span class="toc-number">2.2.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-3"><span class="toc-number">2.3.</span> <span class="toc-text">Practice 3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Operating System | Ucore-Lab4
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Rex</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-07-21T12:22:21.000Z" itemprop="datePublished">2021-07-21</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Operating-System/" rel="tag">Operating System</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Presupposition"><a href="#Presupposition" class="headerlink" title="Presupposition"></a>Presupposition</h2><p>In this lab, we will not differ (process, thread) and (pcb, tcb). Because based on the presupposition, we can just create kernel thread.</p>
+<h2 id="Practices-amp-Conclusion"><a href="#Practices-amp-Conclusion" class="headerlink" title="Practices &amp; Conclusion"></a>Practices &amp; Conclusion</h2><h3 id="Practice-1"><a href="#Practice-1" class="headerlink" title="Practice 1"></a>Practice 1</h3><ul>
+<li><p>The process control block in ucore is designed like this</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">struct proc_struct &#123;</span><br><span class="line">    enum proc_state state;                      // Process state</span><br><span class="line">    int pid;                                    // Process ID</span><br><span class="line">    int runs;                                   // the running times of Proces</span><br><span class="line">    uintptr_t kstack;                           // Process kernel stack</span><br><span class="line">    volatile bool need_resched;                 // bool value: need to be rescheduled to release CPU?</span><br><span class="line">    struct proc_struct *parent;                 // the parent process</span><br><span class="line">    struct mm_struct *mm;                       // Process&#x27;s memory management field</span><br><span class="line">    struct context context;                     // Switch here to run process</span><br><span class="line">    struct trapframe *tf;                       // Trap frame for current interrupt</span><br><span class="line">    uintptr_t cr3;                              // CR3 register: the base addr of Page Directroy Table(PDT)</span><br><span class="line">    uint32_t flags;                             // Process flag</span><br><span class="line">    char name[PROC_NAME_LEN + 1];               // Process name</span><br><span class="line">    list_entry_t list_link;                     // Process link list </span><br><span class="line">    list_entry_t hash_link;                     // Process hash list</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>The context struct is used for saving or restoring registers when switching the running process, it records the context of one process. We save the fork return address as <code>context.eip</code>, so the newly process will start at fork return in this lab.</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">struct context &#123;</span><br><span class="line">    uint32_t eip;</span><br><span class="line">    uint32_t esp;</span><br><span class="line">    uint32_t ebx;</span><br><span class="line">    uint32_t ecx;</span><br><span class="line">    uint32_t edx;</span><br><span class="line">    uint32_t esi;</span><br><span class="line">    uint32_t edi;</span><br><span class="line">    uint32_t ebp;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>The trapframe struct can be writen when interrupt occurred, cpu will reset to run the ISR and find the corresponding handler. Then the trapframe would be used to parse and handle the interrupt. In this lab, we use trapframe as the first stack frame to initialize the process stack, so that when newly process starting at fork return address and jumping to trapret func, trapret will reset the current esp to trapframe.tf_esp, when iret done, cpu will be set up totally to run the <code>kernel_thread_entry</code> which is a wrapped function to redirect the function what we request before.</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct trapframe &#123;</span><br><span class="line">    struct pushregs tf_regs;</span><br><span class="line">    uint16_t tf_gs;</span><br><span class="line">    uint16_t tf_padding0;</span><br><span class="line">    uint16_t tf_fs;</span><br><span class="line">    uint16_t tf_padding1;</span><br><span class="line">    uint16_t tf_es;</span><br><span class="line">    uint16_t tf_padding2;</span><br><span class="line">    uint16_t tf_ds;</span><br><span class="line">    uint16_t tf_padding3;</span><br><span class="line">    uint32_t tf_trapno;</span><br><span class="line">    /* below here defined by x86 hardware */</span><br><span class="line">    uint32_t tf_err;</span><br><span class="line">    uintptr_t tf_eip;</span><br><span class="line">    uint16_t tf_cs;</span><br><span class="line">    uint16_t tf_padding4;</span><br><span class="line">    uint32_t tf_eflags;</span><br><span class="line">    /* below here only when crossing rings, such as from user to kernel */</span><br><span class="line">    uintptr_t tf_esp;</span><br><span class="line">    uint16_t tf_ss;</span><br><span class="line">    uint16_t tf_padding5;</span><br><span class="line">&#125; __attribute__((packed));</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Practice-2"><a href="#Practice-2" class="headerlink" title="Practice 2"></a>Practice 2</h3><h4 id="Problem-1"><a href="#Problem-1" class="headerlink" title="Problem 1"></a>Problem 1</h4><p>The following codes had shown the processing of do_fork().</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">//    1. call alloc_proc to allocate a proc_struct</span><br><span class="line">if ((proc = alloc_proc()) == NULL) &#123;</span><br><span class="line">    goto fork_out;</span><br><span class="line">&#125;</span><br><span class="line">proc-&gt;parent = current;</span><br><span class="line"></span><br><span class="line">//    2. call setup_kstack to allocate a kernel stack for child process</span><br><span class="line">if (setup_kstack(proc) != 0) &#123;</span><br><span class="line">    goto bad_fork_cleanup_proc;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//    3. call copy_mm to dup OR share mm according clone_flag</span><br><span class="line">if (copy_mm(clone_flags, proc) != 0) &#123;</span><br><span class="line">    goto bad_fork_cleanup_kstack;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//    4. call copy_thread to setup tf &amp; context in proc_struct</span><br><span class="line">copy_thread(proc, stack, tf);</span><br><span class="line"></span><br><span class="line">//    5. insert proc_struct into hash_list &amp;&amp; proc_list</span><br><span class="line">bool intr_flag;</span><br><span class="line">local_intr_save(intr_flag);</span><br><span class="line">&#123;</span><br><span class="line">    proc-&gt;pid = get_pid();</span><br><span class="line">    hash_proc(proc);</span><br><span class="line">    list_add(&amp;proc_list, &amp;(proc-&gt;list_link));</span><br><span class="line">    nr_process ++;</span><br><span class="line">&#125;</span><br><span class="line">local_intr_restore(intr_flag);</span><br><span class="line"></span><br><span class="line">//    6. call wakeup_proc to make the new child process RUNNABLE</span><br><span class="line">wakeup_proc(proc);</span><br><span class="line"></span><br><span class="line">//    7. set ret vaule using child proc&#x27;s pid</span><br><span class="line">ret = proc-&gt;pid;</span><br></pre></td></tr></table></figure>
+<p>Notice: </p>
+<ul>
+<li>Step 3 has decided the way to operating the memory, duplicate or share with its parent.</li>
+</ul>
+<h4 id="Problem-2"><a href="#Problem-2" class="headerlink" title="Problem 2"></a>Problem 2</h4><p>Ucore can assign an unique process id for each process control block. First, Step 5 in Prob.1 has shown us that it will do the assigning opertion with interrupt disabled by command <code>local_intr_save(intr_flag)</code>, because of that, cpu will not be rescheduled to other threads or processes until <code>local_intr_restore(intr_flag)</code> called. Secondly, the logic of <code>get_pid()</code>, which use two parameters <code>last_pid</code> and <code>next_safe</code> to ensure a safe interval can be used, ensures an unique pid assigned with an acceptable time complexity.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">// get_pid - alloc a unique pid for process</span><br><span class="line">static int</span><br><span class="line">get_pid(void) &#123;</span><br><span class="line">    static_assert(MAX_PID &gt; MAX_PROCESS);</span><br><span class="line">    struct proc_struct *proc;</span><br><span class="line">    list_entry_t *list = &amp;proc_list, *le;</span><br><span class="line">    static int next_safe = MAX_PID, last_pid = MAX_PID;</span><br><span class="line">    if (++ last_pid &gt;= MAX_PID) &#123;</span><br><span class="line">        last_pid = 1;</span><br><span class="line">        goto inside;</span><br><span class="line">    &#125;</span><br><span class="line">    if (last_pid &gt;= next_safe) &#123;</span><br><span class="line">    inside:</span><br><span class="line">        next_safe = MAX_PID;</span><br><span class="line">    repeat:</span><br><span class="line">        le = list;</span><br><span class="line">        while ((le = list_next(le)) != list) &#123;</span><br><span class="line">            proc = le2proc(le, list_link);</span><br><span class="line">            if (proc-&gt;pid == last_pid) &#123;</span><br><span class="line">                if (++ last_pid &gt;= next_safe) &#123;</span><br><span class="line">                    if (last_pid &gt;= MAX_PID) &#123;</span><br><span class="line">                        last_pid = 1;</span><br><span class="line">                    &#125;</span><br><span class="line">                    next_safe = MAX_PID;</span><br><span class="line">                    goto repeat;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (proc-&gt;pid &gt; last_pid &amp;&amp; next_safe &gt; proc-&gt;pid) &#123;</span><br><span class="line">                next_safe = proc-&gt;pid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return last_pid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Practice-3"><a href="#Practice-3" class="headerlink" title="Practice 3"></a>Practice 3</h3><h4 id="Problem-1-1"><a href="#Problem-1-1" class="headerlink" title="Problem 1"></a>Problem 1</h4><p>In lab4, ucore created 2 processes: idle and init.<br>Ucore created a pcb named <code>idle</code> in the final stages then it set current process to idle. Idle process is used to run in idle status or switch the running processes. Init process is just used to print string in this lab, it will change to be more functional in the following labs. When the ucore running to cpu idle, the control will be handed to idle or another processes which is can be scheduled.</p>
+<h4 id="Problem-2-1"><a href="#Problem-2-1" class="headerlink" title="Problem 2"></a>Problem 2</h4><p>Codes of proc_run:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// proc_run - make process &quot;proc&quot; running on cpu</span><br><span class="line">// NOTE: before call switch_to, should load  base addr of &quot;proc&quot;&#x27;s new PDT</span><br><span class="line">void</span><br><span class="line">proc_run(struct proc_struct *proc) &#123;</span><br><span class="line">    if (proc != current) &#123;</span><br><span class="line">        bool intr_flag;</span><br><span class="line">        struct proc_struct *prev = current, *next = proc;</span><br><span class="line">        local_intr_save(intr_flag);</span><br><span class="line">        &#123;</span><br><span class="line">            current = proc;</span><br><span class="line">            load_esp0(next-&gt;kstack + KSTACKSIZE);</span><br><span class="line">            lcr3(next-&gt;cr3);</span><br><span class="line">            switch_to(&amp;(prev-&gt;context), &amp;(next-&gt;context));</span><br><span class="line">        &#125;</span><br><span class="line">        local_intr_restore(intr_flag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In these codes, <code>local_intr_save(intr_flag)</code> and <code>local_intr_restore(intr_flag)</code> disabled the interrupt to ensure cpu executing commands in an atomic status which means it can not be interrputted. Because of that, registers of cpu can be restore and reset with security. </p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/tags/">Topics</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Presupposition"><span class="toc-number">1.</span> <span class="toc-text">Presupposition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-1"><span class="toc-number">2.1.</span> <span class="toc-text">Practice 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-2"><span class="toc-number">2.2.</span> <span class="toc-text">Practice 2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2"><span class="toc-number">2.2.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-3"><span class="toc-number">2.3.</span> <span class="toc-text">Practice 3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&text=Operating System | Ucore-Lab4"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&is_video=false&description=Operating System | Ucore-Lab4"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab4&body=Check out this article: https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&title=Operating System | Ucore-Lab4"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&name=Operating System | Ucore-Lab4&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.rexcap.cn/2021/07/21/Operating-System-Ucore-Lab4/&t=Operating System | Ucore-Lab4"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <div class="py4">
+          <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    Rex
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        </div>
+    </div>
+  </div>
+  <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+  <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

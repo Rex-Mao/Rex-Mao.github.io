@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Presupposition First we should notice a 32-bits register can store 2^32 different RAM addresses. Each RAM address corresponds to a Byte(8 bits) in modern RAMs. So a 32-bit register can corresponds (2^">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Operating System | Ucore-Lab2">
+<meta property="og:url" content="https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/">
+<meta property="og:site_name" content="Rex.blog">
+<meta property="og:description" content="Presupposition First we should notice a 32-bits register can store 2^32 different RAM addresses. Each RAM address corresponds to a Byte(8 bits) in modern RAMs. So a 32-bit register can corresponds (2^">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.rexcap.cn/images/SegmentedPaging.png">
+<meta property="article:published_time" content="2021-07-05T18:05:40.000Z">
+<meta property="article:modified_time" content="2023-08-30T03:52:53.509Z">
+<meta property="article:author" content="Rex">
+<meta property="article:tag" content="Operating System">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.rexcap.cn/images/SegmentedPaging.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Operating System | Ucore-Lab2</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="banner">
+<div id="blogtitel" class="blogtitel">Rex.blog</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+  
+  <div class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/07/17/Operating-System-Ucore-Lab3/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/06/23/Operating-System-Ucore-Lab1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&text=Operating System | Ucore-Lab2"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&is_video=false&description=Operating System | Ucore-Lab2"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab2&body=Check out this article: https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&name=Operating System | Ucore-Lab2&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&t=Operating System | Ucore-Lab2"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Presupposition"><span class="toc-number">1.</span> <span class="toc-text">Presupposition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-0"><span class="toc-number">2.1.</span> <span class="toc-text">Practice 0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-1"><span class="toc-number">2.2.</span> <span class="toc-text">Practice 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-2"><span class="toc-number">2.3.</span> <span class="toc-text">Practice 2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-3"><span class="toc-number">2.4.</span> <span class="toc-text">Practice 3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1-1"><span class="toc-number">2.4.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2-1"><span class="toc-number">2.4.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Operating System | Ucore-Lab2
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Rex</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-07-05T18:05:40.000Z" itemprop="datePublished">2021-07-06</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Operating-System/" rel="tag">Operating System</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Presupposition"><a href="#Presupposition" class="headerlink" title="Presupposition"></a>Presupposition</h2><ol>
+<li>First we should notice a 32-bits register can store 2^32 different RAM addresses. Each RAM address corresponds to a Byte(8 bits) in modern RAMs. So a 32-bit register can corresponds (2^32 * 2^3) which equals 4GB.</li>
+<li>About the kernel boot and memory detect, init, map processing are as follow.<ol>
+<li><p>What we should know secondly is, before the kernal started, the bootloader had enable the a20 and protected segment mode. After that we got a mapping (VA &#x3D; LA &#x3D; PA) with base addr 0x0. </p>
+</li>
+<li><p>In kernel.ld, it defined the new base, text(code&#x2F;text segment), data(it used for store initalized global varibles), bss(Block Started by Symbol, segment bss is a memory space used for store the un-initalize global varibles, it belongs to static memory allocation) addrress under the segment mode by lgdt. </p>
+</li>
+<li><p>After loading kernel.ld and executing the entry.S had modified the based addr to 0xC0000000. They tune the kernel start linked addr to virtual address(VA) 0xC0100000. Of course, this VA(0xC0100000) mapping to the PA (0x00100000 &#x3D; 1*(2^4)^5 &#x3D; 2^20 RAM addresses, 2^20B &#x3D; 1MB size in RAM memory). We had achieved the mapping (VA|LA &#x3D; PA + 0xC0000000).</p>
+</li>
+<li><p>Detect the physical memory layout by e820 then map and init pages descriptors and the free page list Now, we can use alloc and free opertions of pages.</p>
+</li>
+<li><p>Alloc a page frame(4KB) for boot_pgdir(virtual address corresponds to this page frame) and use it to store the page table. 4KB can store 1024 ptes(32bit, 4B), which means 1024 * 4B &#x3D; 4MB physical memory. Set its physical memory address to boot_pgdir[PDX(VPT)] which points itself in virtual page table.</p>
+</li>
+<li><p>Remap the segment memory layout by boot_map_segment. Via mapping the pte and physical memory address, it maps all linear address (KERNBASE ~ KERNBASE + KMEMSIZE) to the physical address (0 ~ KMEMSIZE). Now we get a full size page table mapping to KMEMSIZE physical memory.</p>
+</li>
+<li><p><code>boot_pgdir[0] = boot_pgdir[PDX(KERNBASE)]</code> Set a temporary mapping for kernel code and data, which will be used by cpu low addr to high addr switch. It allocs just one pde means 2^10 * 4KB &#x3D; 4MB for temporary memory so that kernel may be crash if it’s not enough. The solution will be allocing more temporary memory for kernel info before switch.</p>
+</li>
+<li><p>Refresh the cr3(pgdir) and cr0(paging flag) to enable the paging mode</p>
+</li>
+<li><p>Init the TSS then realod the gdt.<br> The task state segment (TSS) is a structure on x86-based computers which holds information about a task. It is used by the operating system kernel for task management. Specifically, the following information is stored in the TSS:</p>
+<ul>
+<li>Processor register state</li>
+<li>I&#x2F;O port permissions</li>
+<li>Inner-level stack pointers</li>
+<li>Previous TSS link</li>
+</ul>
+</li>
+<li><p>Cancel the temporary memory mapping of boot_pgdir[0] which used in cpu running address switches.</p>
+</li>
+</ol>
+</li>
+<li>Page descriptor is using for describing the memory perporties. Page table is using for mapping the virtual and physical address.</li>
+<li>Virtual memory map of Ucore is as follow <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/* *</span><br><span class="line">* Virtual memory map:                                          Permissions</span><br><span class="line">*                                                              kernel/user</span><br><span class="line">*</span><br><span class="line">*     4G ------------------&gt; +---------------------------------+</span><br><span class="line">*                            |                                 |</span><br><span class="line">*                            |         Empty Memory (*)        |</span><br><span class="line">*                            |                                 |</span><br><span class="line">*                            +---------------------------------+ 0xFB000000</span><br><span class="line">*                            |   Cur. Page Table (Kern, RW)    | RW/-- PTSIZE  -- use 4KB =&gt; 2^10 pdes =&gt;  2^20 ptes =&gt; 2^20 * Page Frame(4KB) = 4G Physical Memory</span><br><span class="line">*     VPT -----------------&gt; +---------------------------------+ 0xFAC00000</span><br><span class="line">*                            |        Invalid Memory (*)       | --/--</span><br><span class="line">*     KERNTOP -------------&gt; +---------------------------------+ 0xF8000000</span><br><span class="line">*                            |                                 |</span><br><span class="line">*                            |    Remapped Physical Memory     | RW/-- KMEMSIZE(896MB)</span><br><span class="line">*                            |                                 |</span><br><span class="line">*     KERNBASE ------------&gt; +---------------------------------+ 0xC0000000</span><br><span class="line">*                            |                                 |</span><br><span class="line">*                            |                                 |</span><br><span class="line">*                            |                                 |</span><br><span class="line">*                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">* (*) Note: The kernel ensures that &quot;Invalid Memory&quot; is *never* mapped.</span><br><span class="line">*     &quot;Empty Memory&quot; is normally unmapped, but user programs may map pages</span><br><span class="line">*     there if desired.</span><br><span class="line">*</span><br><span class="line">* */</span><br></pre></td></tr></table></figure></li>
+<li>Segmented Paging Memory Management</li>
+</ol>
+<ul>
+<li><img src="/images/SegmentedPaging.png" alt="Segmented Paging Memory Management"></li>
+</ul>
+<h2 id="Practices-amp-Conclusion"><a href="#Practices-amp-Conclusion" class="headerlink" title="Practices &amp; Conclusion"></a>Practices &amp; Conclusion</h2><h3 id="Practice-0"><a href="#Practice-0" class="headerlink" title="Practice 0"></a>Practice 0</h3><p>For achieving the lab2 better, we need to use diff and patch to merge the code from lab1.</p>
+<ul>
+<li>diff  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">diff -Nu lab2/kern/debug/kdebug.c lab1/kern/debug/kdebug.c &gt;&gt; lab_merge.patch</span><br><span class="line">-N treat absent files as empty</span><br><span class="line">-u unified style, if your system lacks it or if recipient may not have it, use &quot;-c&quot;</span><br><span class="line">-r recursive, so do subdirectories</span><br></pre></td></tr></table></figure></li>
+<li>patch  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">patch -p0 &lt; ../lab_merge.patch</span><br><span class="line">-s == silent except errors</span><br><span class="line">-p0 == needed to find the proper folder</span><br><span class="line">PS: use cd to origin path and use -p param to strip the path, like lab2/kern/debug/kdebug.c =&gt; -p1 = kern/debug/kdebug.c</span><br></pre></td></tr></table></figure></li>
+<li>notes from web  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># to create patch:</span><br><span class="line"># copy &lt;directory&gt; backup to something like &lt;directory&gt;.orig alongside it</span><br><span class="line">cp -r &lt;path_to&gt;/&lt;directory&gt; &lt;path_to&gt;/&lt;directory&gt;.orig</span><br><span class="line"># create/update/delete files/folders in &lt;directory&gt; until desired state is reached</span><br><span class="line"># change working directory to &lt;directory&gt;</span><br><span class="line">cd &lt;path_to&gt;/&lt;directory&gt;</span><br><span class="line"># create patch file alongside &lt;directory&gt;</span><br><span class="line">diff -Naru ../&lt;directory&gt;.orig . &gt; ../file.patch</span><br><span class="line"># -N --new-file Treat absent files as empty.</span><br><span class="line"># -a --text Treat all files as text.</span><br><span class="line"># -r --recursive Recursively compare any subdirectories found.</span><br><span class="line"># -u -U NUM --unified[=NUM] Output NUM (default 3) lines of unified context.</span><br><span class="line"></span><br><span class="line"># to apply patch:</span><br><span class="line"># change working directory to &lt;directory&gt;</span><br><span class="line">cd &lt;path_to&gt;/&lt;directory&gt;</span><br><span class="line">patch -s -p0 &lt; &lt;path_to&gt;/file.patch</span><br><span class="line"># -s or --silent or --quiet Work silently, unless an error occurs.</span><br><span class="line"># -pN or --strip=N Strip smallest prefix containing num leading slashes from files.</span><br><span class="line"></span><br><span class="line"># to undo patch (note that directories created by patch must be removed manually):</span><br><span class="line"># change working directory to &lt;directory&gt;</span><br><span class="line">cd &lt;path_to&gt;/&lt;directory&gt;</span><br><span class="line">patch -Rs -p0 &lt; &lt;path_to&gt;/file.patch</span><br><span class="line"># -R or --reverse Assume that patch was created with the old and new files swapped.</span><br><span class="line"># -s or --silent or --quiet Work silently, unless an error occurs.</span><br><span class="line"># -pN or --strip=N Strip smallest prefix containing num leading slashes from files.</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Practice-1"><a href="#Practice-1" class="headerlink" title="Practice 1"></a>Practice 1</h3><p>In this practice, we achieved the first fit memory alloc ALGO. What we should notice is diffing the follows.</p>
+<ul>
+<li>physical address of RAM(memory)</li>
+<li>page descriptor (size 4B, not page frame(4KB), one page frame can contain 2^10 Page descriptor) which record those pages info of physical addresses, stored at the address of ending of kernel. </li>
+<li>free_list, corresponds a mutable list of usable page_link.</li>
+</ul>
+<p>We can use page_link of free_list to get the page descriptor with function le2page(). The alloc and free operations correspond to modifying the free_list and setting the flags and property of the pages. </p>
+<p>As for first fit memory alloc algorithm, it asks us to find first continuous free pages from the free_list to alloc. We need to pay more attention to keep the free_list order by addresses and keep the mapping continuous in physical memory level when doing init, alloc and free operations.</p>
+<ul>
+<li>default_init: init a free pages list.</li>
+<li>default_init_memmap: create page descriptor for every usable PGSIZE physical memory block detected by e820 and link them to the free pages list.</li>
+<li>default_alloc_pages: find the first n continuous pages in free list, set some property, remove them from the free list and return the pointer points to the start page descriptor.</li>
+<li>default_free_pages: clear up the page properties and relink them to free list, the continuity of the physical memory should be noticed.</li>
+</ul>
+<h3 id="Practice-2"><a href="#Practice-2" class="headerlink" title="Practice 2"></a>Practice 2</h3><h4 id="Problem-1"><a href="#Problem-1" class="headerlink" title="Problem 1"></a>Problem 1</h4><p>First, the page directory entry corresponding to the virtual address range [VPT, VPT + PTSIZE) points to the page directory itself. Thus, the page directory is treated as a page table as well as a page directory.</p>
+<p>Second, a linear address ‘la’ has a three-part structure as follows:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// +--------10------+-------10-------+---------12----------+</span><br><span class="line">// | Page Directory |   Page Table   | Offset within Page  |</span><br><span class="line">// |      Index     |     Index      |                     |</span><br><span class="line">// +----------------+----------------+---------------------+</span><br><span class="line">//  \--- PDX(la) --/ \--- PTX(la) --/ \---- PGOFF(la) ----/</span><br><span class="line">//  \----------- PPN(la) -----------/</span><br></pre></td></tr></table></figure>
+<p>According to that, we can get the pde&#x2F;pte as follows:</p>
+<ul>
+<li>Page Directory Entry (use high 10 bits to get)  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pde = (pte_base_addr &amp; ~0x0FFF) | PTE_U | PTE_W | PTE_P</span><br></pre></td></tr></table></figure></li>
+<li>Page Table Entry (use mid 10 bits to get)  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pte = (physical_address  &amp; ~0x0FFF) | PTE_P | PTE_W</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>In ucore, we would need la and those two struct to get an physical address. What’s more important is we can change the pte value to change the mapping of the virtual address and physical address(start address of a page frame).</p>
+<h4 id="Problem-2"><a href="#Problem-2" class="headerlink" title="Problem 2"></a>Problem 2</h4><p>When the processor visit an nonexistent page, a page fault(#PF) will happen. An interrupt will be triggered, then the interrupt handling service will be pushed to the stack and executed. If the visit is valid then the service will alloc a new page for the visit and refresh the TLB. Finally, call the iret to interrupt and jump back to the exception address and go on process. If the visit is invalid, error will be raised.</p>
+<h3 id="Practice-3"><a href="#Practice-3" class="headerlink" title="Practice 3"></a>Practice 3</h3><h4 id="Problem-1-1"><a href="#Problem-1-1" class="headerlink" title="Problem 1"></a>Problem 1</h4><p>There is a mapping relation existed between page descriptors and pdes&#x2F;ptes. The transition is like the follow:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">PTE =&gt; Page: use index which composited by high 20 bits of pte to get pages[index]</span><br><span class="line">&amp;pages[(</span><br><span class="line">    (</span><br><span class="line">        (uintptr_t)(</span><br><span class="line">            (</span><br><span class="line">                (uintptr_t)(pte) &amp; ~0xFFF</span><br><span class="line">            )</span><br><span class="line">        )</span><br><span class="line">    ) &gt;&gt; PTXSHIFT</span><br><span class="line">)]    </span><br></pre></td></tr></table></figure>
+
+<h4 id="Problem-2-1"><a href="#Problem-2-1" class="headerlink" title="Problem 2"></a>Problem 2</h4><p>Reset KERNBASE from 从0xC0000000 to 0x00000000 will get the target which maps the VA&#x3D;LA&#x3D;PA</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/tags/">Topics</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Presupposition"><span class="toc-number">1.</span> <span class="toc-text">Presupposition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practices-amp-Conclusion"><span class="toc-number">2.</span> <span class="toc-text">Practices &amp; Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-0"><span class="toc-number">2.1.</span> <span class="toc-text">Practice 0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-1"><span class="toc-number">2.2.</span> <span class="toc-text">Practice 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-2"><span class="toc-number">2.3.</span> <span class="toc-text">Practice 2</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2"><span class="toc-number">2.3.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice-3"><span class="toc-number">2.4.</span> <span class="toc-text">Practice 3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-1-1"><span class="toc-number">2.4.1.</span> <span class="toc-text">Problem 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem-2-1"><span class="toc-number">2.4.2.</span> <span class="toc-text">Problem 2</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&text=Operating System | Ucore-Lab2"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&is_video=false&description=Operating System | Ucore-Lab2"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Operating System | Ucore-Lab2&body=Check out this article: https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&title=Operating System | Ucore-Lab2"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&name=Operating System | Ucore-Lab2&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.rexcap.cn/2021/07/06/Operating-System-Ucore-Lab2/&t=Operating System | Ucore-Lab2"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <div class="py4">
+          <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    Rex
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Topics</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        </div>
+    </div>
+  </div>
+  <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+  <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
